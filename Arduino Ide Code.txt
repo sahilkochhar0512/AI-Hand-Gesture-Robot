@@ -1,0 +1,300 @@
+#include <Servo.h>
+#include <WiFi.h>
+#include <PubSubClient.h>
+
+Servo Thumb;
+Servo Index;
+Servo Middle;
+Servo Ring;
+Servo Pinky;
+
+const char* ssid = "Yolabs_2G";
+const char* password = "yolabs4321";
+const char* mqtt_server = "mqtt.eclipseprojects.io";
+
+WiFiClient espClient;
+PubSubClient client(espClient);
+
+void setup() {
+  Thumb.attach(13);
+  Index.attach(12);
+  Middle.attach(14);
+  Ring.attach(27);
+  Pinky.attach(25);
+  Serial.begin(115200);
+  setup_wifi();
+  client.setServer(mqtt_server, 1883);
+  client.setCallback(callback);
+}
+
+void setup_wifi() {
+  delay(10);
+  WiFi.begin(ssid, password);
+
+  while (WiFi.status() != WL_CONNECTED) {
+    delay(500);
+    Serial.print(".");
+  }
+
+  Serial.println("");
+  Serial.println("WiFi connected");
+  Serial.println("IP address: ");
+  Serial.println(WiFi.localIP());
+}
+
+void callback(char* topic, byte* payload, unsigned int length) {
+  Serial.print("Message arrived [");
+  Serial.print(topic);
+  Serial.print("] ");
+  String messageTemp;
+   for (unsigned int i = 0; i < length; i++) {
+     Serial.print((char)payload[i]);
+     messageTemp += (char)payload[i];
+   }
+  move(messageTemp.toInt());
+  
+  Serial.println();
+}
+
+void reconnect() {
+  while (!client.connected()) {
+    Serial.print("Attempting MQTT connection...");
+    if (client.connect("ESP32Client")) {
+      Serial.println("connected");
+      client.subscribe("python/test");
+    } else {
+      Serial.print("failed, rc=");
+      Serial.print(client.state());
+      Serial.println(" try again in 5 seconds");
+      delay(5000);
+    }
+  }
+}
+
+
+void loop() {
+  if (!client.connected()) {
+    reconnect();
+  }
+  client.loop();
+}
+
+
+void everydown() {
+  Index.write(65);
+  Middle.write(65);
+  Ring.write(65);
+  Pinky.write(65);
+  Thumb.write(65);
+  delay(300);
+}
+void Iup() {
+  Index.write(180);
+  delay(300);
+}
+void Mup() {
+  Middle.write(180);
+  delay(300);
+}
+void Rup() {
+  Ring.write(180);
+  delay(300);
+}
+void Pup() {
+  Pinky.write(180);
+  delay(300);
+}
+void Tup() {
+  Index.write(180);
+  delay(300);
+}
+
+
+
+
+void move(int num) {
+  switch (num) {
+    case 0:
+      everydown();
+      break;
+    case 1:
+      everydown();
+      Iup();
+      break;
+    case 2:
+      everydown();
+      Mup();
+      break;
+    case 3:
+      everydown();
+      Rup();
+      break;
+    case 4:
+      everydown();
+      Pup();
+      break;
+    case 5:
+      everydown();
+      Tup();
+      break;
+    case 6:
+      everydown();
+      Iup();
+      Mup();
+      break;
+    case 7:
+      everydown();
+      Iup();
+      Rup();
+      break;
+    case 8:
+      everydown();
+      Iup();
+      Pup();
+      break;
+    case 9:
+      everydown();
+      Iup();
+      Tup();
+      break;
+    case 10:
+      everydown();
+      Mup();
+      Rup();
+      break;
+    case 11:
+      everydown();
+      Mup();
+      Pup();
+      break;
+    case 12:
+      everydown();
+      Mup();
+      Tup();
+      break;
+    case 13:
+      everydown();
+      Rup();
+      Pup();
+      break;
+    case 14:
+      everydown();
+      Rup();
+      Tup();
+      break;
+    case 15:
+      everydown();
+      Pup();
+      Tup();
+      break;
+    case 16:
+      everydown();
+      Iup();
+      Mup();
+      Rup();
+      break;
+    case 17:
+      everydown();
+      Iup();
+      Mup();
+      Pup();
+      break;
+    case 18:
+      everydown();
+      Iup();
+      Mup();
+      Tup();
+      break;
+    case 19:
+      everydown();
+      Iup();
+      Rup();
+      Pup();
+      break;
+    case 20:
+      everydown();
+      Iup();
+      Rup();
+      Tup();
+      break;
+    case 21:
+      everydown();
+      Iup();
+      Pup();
+      Tup();
+      break;
+    case 22:
+      everydown();
+      Rup();
+      Mup();
+      Pup();
+      break;
+    case 23:
+      everydown();
+      Tup();
+      Mup();
+      Rup();
+      break;
+    case 24:
+      everydown();
+      Tup();
+      Mup();
+      Pup();
+      break;
+    case 25:
+      everydown();
+      Tup();
+      Rup();
+      Pup();
+      break;
+    case 26:
+      everydown();
+      Iup();
+      Mup();
+      Rup();
+      Pup();
+      break;
+    case 27:
+      everydown();
+      Iup();
+      Mup();
+      Rup();
+      Tup();
+      break;
+    case 28:
+      everydown();
+      Iup();
+      Mup();
+      Tup();
+      Pup();
+      break;
+    case 29:
+      everydown();
+      Iup();
+      Tup();
+      Rup();
+      Pup();
+      break;
+    case 30:
+      everydown();
+      Tup();
+      Mup();
+      Rup();
+      Pup();
+      break;
+    case 31:
+      Iup();
+      Mup();
+      Rup();
+      Pup();
+      Tup();
+      break;
+    case 32:
+      everydown();
+      Iup();
+      Pup();
+      break;
+    default:
+      everydown();
+  }
+}
